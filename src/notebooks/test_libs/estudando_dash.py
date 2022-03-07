@@ -1,3 +1,7 @@
+#Para instalar o dash:
+#No CMD (windows) executar o seguinte comando na pasta util do projeto:
+#pip install -r requirements.txt
+
 from turtle import color
 import dash
 # import dash_core_components as dcc #deprecated
