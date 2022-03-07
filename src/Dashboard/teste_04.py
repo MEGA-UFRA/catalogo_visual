@@ -9,11 +9,11 @@ import pandas as pd
 app = Dash(__name__)
 
 #lendo a base de dados
-df = pd.read_csv('PLANILHA_NELORE_ABCZ_GRUPO_2_80.csv', sep = ';')
+df = pd.read_csv(r'.\databases\PLANILHA_NELORE_ABCZ_GRUPO_2_80.csv', sep = ';')
 
 #criando os gráficos
-fig = px.bar(df, x = 'NOME', y = 'DEP_PA_ED', color = 'IABCZ', barmode = 'group')
-fig1 = px.parallel_coordinates(df, color="IABCZ", dimensions=['DEP_PA_ED', 'DEP_PE_365', 'DEP_STAY', 'DEP_PA_ED', 'DEP_TMD', 'DEP_PE_450', 'DEP_ACAB', 'DEP_P'], color_continuous_scale= px.colors.diverging.delta)
+barras = px.bar(df, x = 'NOME', y = 'DEP_PA_ED', color = 'IABCZ', barmode = 'group')
+coordenadas = px.parallel_coordinates(df, color="IABCZ", dimensions=['DEP_PA_ED', 'DEP_PE_365', 'DEP_STAY', 'DEP_PA_ED', 'DEP_TMD', 'DEP_PE_450', 'DEP_ACAB', 'DEP_P'], color_continuous_scale= px.colors.diverging.delta)
 #opcoes = list(df['NOME'])
 #opcoes.append('Todos os dados')
 
@@ -21,21 +21,27 @@ app.layout = html.Div(children=[
     html.H1(children = 'Dashboard Teste'),
     html.H2(children = 'Dashboard com dados referentes a raça Nelore'),
     html.Div(children= '''
-        Coordenadas Paralelas e Profile Glifo
-    '''),
-
-    #dcc.Dropdown(opcoes, value = 'Todos os dados', id = 'Lista de animais'),
-
-    dcc.Graph(
-        id = 'A',
-        figure = fig
-    ),
-
+                        Coordenadas Paralelas e Profile Glifo
+    '''),  
+    html.P(
+            [
+            html.Label("Choose a feature"),
+            dcc.Dropdown(
+                    id='demo-dropdown',                              
+                    options=['NYC', 'MTL', 'SF'],
+                    value='NYC',
+                    multi=True
+                    )
+                    ]
+                    ),  
     dcc.Graph(
         id = 'B',
-        figure = fig1
+        figure = coordenadas
+    ),
+    dcc.Graph(
+        id = 'A',
+        figure = barras
     )
-
 ])
 
 if __name__ == '__main__':
