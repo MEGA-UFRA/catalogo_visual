@@ -5,7 +5,7 @@ import pandas as pd
 
 app = Dash(__name__)
 
-df = pd.read_csv(r'databases\MapBiomas_tabela_de_dados.csv', sep = ',')
+df = pd.read_csv('MapBiomas_tabela_de_dados.csv', sep = ';')
 
 # fig = px.bar(df, x = 'Classe', y = 'Quantidade', color = 'Classe')
 opcoes = list(df['Classe'].unique())
