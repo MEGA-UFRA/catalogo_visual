@@ -46,14 +46,14 @@ app.layout = html.Div(children = [
         figure = coordenadas
              ),
 
-    html.Label("Escolha as características: "),
-    dcc.Dropdown(
-        id = 'dropdown_profile',
-        options = [{'label': x, 'value': x} for x in conteudo_dropdown],
-        value = None,
-        multi = True
-    ),
-    
+    #html.Label("Escolha as características: "),
+    #dcc.Dropdown(
+     #   id = 'dropdown_profile',
+      #  options = [{'label': x, 'value': x} for x in conteudo_dropdown],
+       # value = None,
+        #multi = True
+    #),
+
     dcc.Graph(
         id = 'profile_glyph_A',
         figure = barras
@@ -81,7 +81,7 @@ def update_coordenadas_paralelas(value):
 
 @app.callback(
     Output('profile_glyph_A', 'figure'),
-    Input('dropdown_profile', 'value')
+    Input('dropdown_caracteristicas', 'value')
 )
 
 def update_profile_glyph(value):
