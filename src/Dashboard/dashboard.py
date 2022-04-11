@@ -12,6 +12,7 @@ app = Dash(__name__)
 # LEITURA DA BASE DE DADOS
 #============================================
 df = pd.read_csv(r'databases\PLANILHA_NELORE_ABCZ_GRUPO_2_80.csv', sep = ';')
+
 conteudo_dropdown = list(df.columns)
 
 
@@ -39,11 +40,20 @@ app.layout = html.Div(children = [
                     multi=True
                        )]
             ),
+
     dcc.Graph(
         id = 'coordenadas_paralelas',
         figure = coordenadas
-             )
-    ,
+             ),
+
+    html.Label("Escolha as características: "),
+    dcc.Dropdown(
+        id = 'dropdown_profile',
+        options = [{'label': x, 'value': x} for x in conteudo_dropdown],
+        value = None,
+        multi = True
+    ),
+    
     dcc.Graph(
         id = 'profile_glyph_A',
         figure = barras
@@ -69,6 +79,18 @@ def update_coordenadas_paralelas(value):
 
     return fig
 
+@app.callback(
+    Output('profile_glyph_A', 'figure'),
+    Input('dropdown_profile', 'value')
+)
+
+def update_profile_glyph(value):
+    if value == None:
+        fig = px.bar(df, x = 'NOME', y = 'DEP_PN_ED', color = 'NOME')
+    else:
+        fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
+
+    return fig
 
 # @app.callback(
 #     Output('Selecao', 'children'),
