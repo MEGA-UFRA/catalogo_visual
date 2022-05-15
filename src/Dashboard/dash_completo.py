@@ -4,6 +4,9 @@ import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots 
+#podemos construir o que queremos que apareça na página usando html ou dcc (dash core components)
+#html: aquilo que é mais visual -> adição de texto, linhas, imagem, cor
+#dcc: mudança ou adição de gráfico, adição de botão
 
 app = Dash(__name__)
 
@@ -46,6 +49,14 @@ app.layout = html.Div(children = [
         figure = coordenadas
              ),
 
+    #html.Label("Escolha as características: "),
+    #dcc.Dropdown(
+     #   id = 'dropdown_profile',
+      #  options = [{'label': x, 'value': x} for x in conteudo_dropdown],
+       # value = None,
+        #multi = True
+    #),
+
     dcc.Graph(
         id = 'profile_glyph_A',
         figure = barras
@@ -80,25 +91,25 @@ def update_profile_glyph(value):
     if value == None:
         fig = px.bar(df, x = 'NOME', y = 'DEP_PN_ED', color = 'NOME')
     else:
-        valor1 = value[0]
-        valor2 = value[1]
-        valor3 = value[2]
-        valor4 = value[3]
-        y1 = df[valor1]
-        y2 = df[valor2]
-        y3 = df[valor3]
-        y4 = df[valor4]
-
-        fig = make_subplots(rows = 4, cols = 5)
-        fig.add_trace(go.Bar(x = df.NOME, y = y1, marker_color = "red", name = valor1), row = 1, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y2, marker_color = "green", name = valor2), row = 1, col = 2) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y3, marker_color = "blue", name = valor3), row = 2, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y4, marker_color = "yellow", name = valor4), row = 2, col = 2) 
-        #fig.update_layout(height = 500)
-        #fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
+        fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
 
     return fig
 
+# @app.callback(
+#     Output('Selecao', 'children'),
+#     Input('demo-dropdown', 'value')
+# )
+# def update_grafico_barra(value):
+#     print(f'Você seleciounou: {value}')
+#     #return f'Você seleciounou: {value}'
+#     if value == None:
+#         fig = px.bar(df, x = 'NOME', y = 'DEP_PA_ED', color = 'IABCZ', barmode = 'group')
+#     else:
+#         df_filtrado = df.loc[:, df.columns==value] # loc serve para filtrar / : serve para indicar que se quer tudo
+#         print(f'O que sai? {df.columns==value}')
+#         print(f'Filtrado: {df_filtrado}')
 
-if __name__ == '__main__':
-    app.run_server(debug=True, use_reloader=False)
+#         # fig = px.bar(df, x = 'NOME', y = df_filtrado[0], color = 'IABCZ', barmode = 'group')
+#         fig = px.bar(df, x = 'NOME', y = value, color = 'IABCZ', barmode = 'group')
+
+#     return fig
