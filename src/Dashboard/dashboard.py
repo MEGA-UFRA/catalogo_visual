@@ -80,20 +80,11 @@ def update_profile_glyph(value):
     if value == None:
         fig = px.bar(df, x = 'NOME', y = 'DEP_PN_ED', color = 'NOME')
     else:
-        valor1 = value[0]
-        valor2 = value[1]
-        valor3 = value[2]
-        valor4 = value[3]
-        y1 = df[valor1]
-        y2 = df[valor2]
-        y3 = df[valor3]
-        y4 = df[valor4]
-
         fig = make_subplots(rows = 4, cols = 5)
-        fig.add_trace(go.Bar(x = df.NOME, y = y1, marker_color = "red", name = valor1), row = 1, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y2, marker_color = "green", name = valor2), row = 1, col = 2) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y3, marker_color = "blue", name = valor3), row = 2, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = y4, marker_color = "yellow", name = valor4), row = 2, col = 2) 
+        fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1) 
+        fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+        fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
+        fig.add_trace(go.Bar(x = df.NOME, y = df[value[3]], marker_color = "yellow", name = value[3]), row = 2, col = 2) 
         #fig.update_layout(height = 500)
         #fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
 
