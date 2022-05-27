@@ -77,14 +77,40 @@ def update_coordenadas_paralelas(value):
 )
 
 def update_profile_glyph(value):
+    print(len(value))
     if value == None:
         fig = px.bar(df, x = 'NOME', y = 'DEP_PN_ED', color = 'NOME')
     else:
-        fig = make_subplots(rows = 4, cols = 5)
-        fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
-        fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
-        fig.add_trace(go.Bar(x = df.NOME, y = df[value[3]], marker_color = "yellow", name = value[3]), row = 2, col = 2) 
+        fig = make_subplots(rows = 2, cols = 3)
+        if len(value) == 1:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1) 
+        elif len(value) == 2:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1)
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+        elif len(value) == 3:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1)
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
+        elif len(value) == 4:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1)
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[3]], marker_color = "yellow", name = value[3]), row = 2, col = 2) 
+        elif len(value) == 5:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1)
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[3]], marker_color = "yellow", name = value[3]), row = 2, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[4]], marker_color = "black", name = value[3]), row = 1, col = 3) 
+        else:
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[0]], marker_color = "red", name = value[0]), row = 1, col = 1)
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[1]], marker_color = "green", name = value[1]), row = 1, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[2]], marker_color = "blue", name = value[2]), row = 2, col = 1) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[3]], marker_color = "yellow", name = value[3]), row = 2, col = 2) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[4]], marker_color = "black", name = value[3]), row = 1, col = 3) 
+            fig.add_trace(go.Bar(x = df.NOME, y = df[value[5]], marker_color = "pink", name = value[3]), row = 2, col = 3) 
+
+
         #fig.update_layout(height = 500)
         #fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
 
