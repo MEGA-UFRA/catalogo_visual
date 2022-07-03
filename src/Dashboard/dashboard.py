@@ -11,9 +11,17 @@ app = Dash(__name__)
 #============================================
 # LEITURA DA BASE DE DADOS
 #============================================
-df = pd.read_csv('base_dados_resumida.csv', sep = ';')
-# df = pd.read_csv(r'./databases/base_dados_resumida.csv', sep = ';')
+# df = pd.read_csv('base_dados_resumida.csv', sep = ';')
+df = pd.read_csv(r'./databases/base_dados_resumida.csv', sep = ';')
 
+cores = [
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c",
+        "#d62728",
+        "#9467bd",
+        "#8c564b"
+]
 
 conteudo_dropdown = list(df.columns)
 
@@ -88,38 +96,15 @@ def update_graficos_barras(value):
     if value == None:
         fig = px.bar(df, x = None, y = 'DEP_PN_ED', color = 'NOME')
     else:
-        fig = make_subplots(rows = 2, cols = 3)
-        if len(value) == 1:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1) 
-        elif len(value) == 2:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1)
-            fig.add_trace(go.Bar(x = None, y = df[value[1]], marker_color = "#ff7f0e", name = value[1]), row = 1, col = 2) 
-        elif len(value) == 3:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1)
-            fig.add_trace(go.Bar(x = None, y = df[value[1]], marker_color = "#ff7f0e", name = value[1]), row = 1, col = 2) 
-            fig.add_trace(go.Bar(x = None, y = df[value[2]], marker_color = "#2ca02c", name = value[2]), row = 1, col = 3) 
-        elif len(value) == 4:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1)
-            fig.add_trace(go.Bar(x = None, y = df[value[1]], marker_color = "#ff7f0e", name = value[1]), row = 1, col = 2) 
-            fig.add_trace(go.Bar(x = None, y = df[value[2]], marker_color = "#2ca02c", name = value[2]), row = 1, col = 3) 
-            fig.add_trace(go.Bar(x = None, y = df[value[3]], marker_color = "#d62728", name = value[3]), row = 2, col = 1) 
-        elif len(value) == 5:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1)
-            fig.add_trace(go.Bar(x = None, y = df[value[1]], marker_color = "#ff7f0e", name = value[1]), row = 1, col = 2) 
-            fig.add_trace(go.Bar(x = None, y = df[value[2]], marker_color = "#2ca02c", name = value[2]), row = 1, col = 3) 
-            fig.add_trace(go.Bar(x = None, y = df[value[3]], marker_color = "#d62728", name = value[3]), row = 2, col = 1) 
-            fig.add_trace(go.Bar(x = None, y = df[value[4]], marker_color = "#9467bd", name = value[4]), row = 2, col = 2) 
-        else:
-            fig.add_trace(go.Bar(x = None, y = df[value[0]], marker_color = "#1f77b4", name = value[0]), row = 1, col = 1)#,"","","","",""#
-            fig.add_trace(go.Bar(x = None, y = df[value[1]], marker_color = "#ff7f0e", name = value[1]), row = 1, col = 2) 
-            fig.add_trace(go.Bar(x = None, y = df[value[2]], marker_color = "#2ca02c", name = value[2]), row = 1, col = 3) 
-            fig.add_trace(go.Bar(x = None, y = df[value[3]], marker_color = "#d62728", name = value[3]), row = 2, col = 1) 
-            fig.add_trace(go.Bar(x = None, y = df[value[4]], marker_color = "#9467bd", name = value[4]), row = 2, col = 2) 
-            fig.add_trace(go.Bar(x = None, y = df[value[5]], marker_color = "#8c564b", name = value[5]), row = 2, col = 3) 
-
-
-        #fig.update_layout(height = 500)
-        #fig = px.bar(df, x = 'NOME', y = value, color = 'NOME')
+        fig = make_subplots(rows = 2, cols = 3)        
+        coluna = 0
+        for i in range(0, len(value)):
+            if i <= 2:
+                coluna = i + 1
+                fig.add_trace(go.Bar(x = None, y = df[value[i]], marker_color = cores[i], name = value[i]), row = 1, col = coluna)
+            else:
+                coluna = (i + 1) - 3
+                fig.add_trace(go.Bar(x = None, y = df[value[i]], marker_color = cores[i], name = value[i]), row = 2, col = coluna)
 
     return fig
 
