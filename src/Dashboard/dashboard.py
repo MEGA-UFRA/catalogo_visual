@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots 
+import tkinter as tk
+from tkinter import ttk
 
 app = Dash(__name__)
 
@@ -54,7 +56,16 @@ app.layout = html.Div(children = [
                     options = [{'label': x, 'value': x} for x in conteudo_dropdown],
                     value = None,
                     multi=True
-                       )]
+                       ),
+            html.Button('Característica 1', id='caracteristica_1', n_clicks=0), #n_clicks: parâmetro para o input do callback
+            html.Button('Característica 2', id='caracteristica_2', n_clicks=0), #n_clicks: número de vezes que o botão foi clicado
+            html.Button('Característica 3', id='caracteristica_3', n_clicks=0),
+            html.Button('Característica 4', id='caracteristica_4', n_clicks=0),
+            html.Button('Característica 5', id='caracteristica_5', n_clicks=0),
+            html.Button('Característica 6', id='caracteristica_6', n_clicks=0),
+            html.Div(id = 'botao_enter'),
+            html.Label('Quantidade de animais: '),
+            dcc.Input(id = 'numero_animais', min = 0, max = 10, value = 0, type = 'number')]
             ),
 
     dcc.Graph(
@@ -69,20 +80,31 @@ app.layout = html.Div(children = [
 ])
 
 #============================================
+# VALOR CRESCENTE OU DECRESCENTE
+#============================================
+
+def maior_menor(a):
+    if df.columns == a:
+        dff = sorted(df.columns)
+    
+    return dff
+
+#============================================
 # CALLBACKS
 #============================================
 @app.callback(
     Output('coordenadas_paralelas', 'figure'),
     Input('dropdown_caracteristicas', 'value')
+
 )
-def update_coordenadas_paralelas(value):
-    if value == None:
+def update_coordenadas_paralelas(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None:
         fig = px.parallel_coordinates(df, color="IABCZ", 
                                       dimensions=['DEP_PA_ED', 'DEP_PE_365', 'DEP_STAY', 'DEP_PA_ED', 'DEP_TMD', 'DEP_PE_450', 'DEP_ACAB', 'DEP_P'], 
                                       color_continuous_scale= px.colors.diverging.delta)
     else:
         fig = px.parallel_coordinates(df, color="IABCZ", 
-                                  dimensions=value, 
+                                  dimensions=dropdown_caracteristicas, 
                                   color_continuous_scale= px.colors.diverging.delta)
 
     return fig
@@ -90,21 +112,24 @@ def update_coordenadas_paralelas(value):
 @app.callback(
     Output('graficos_barras', 'figure'),
     Input('dropdown_caracteristicas', 'value')
-)
 
-def update_graficos_barras(value):
-    if value == None:
+)
+#df['NOME'] = numero_animais
+#print(df['NOME'])
+
+def update_graficos_barras(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None:
         fig = px.bar(df, x = None, y = 'DEP_PN_ED', color = 'NOME')
     else:
         fig = make_subplots(rows = 2, cols = 3)        
         coluna = 0
-        for i in range(0, len(value)):
+        for i in range(0, len(dropdown_caracteristicas)):
             if i <= 2:
                 coluna = i + 1
-                fig.add_trace(go.Bar(x = None, y = df[value[i]], marker_color = cores[i], name = value[i]), row = 1, col = coluna)
+                fig.add_trace(go.Bar(x = None, y = df[dropdown_caracteristicas[i]], marker_color = cores[i], name = dropdown_caracteristicas[i]), row = 1, col = coluna)
             else:
                 coluna = (i + 1) - 3
-                fig.add_trace(go.Bar(x = None, y = df[value[i]], marker_color = cores[i], name = value[i]), row = 2, col = coluna)
+                fig.add_trace(go.Bar(x = None, y = df[dropdown_caracteristicas[i]], marker_color = cores[i], name = dropdown_caracteristicas[i]), row = 2, col = coluna)
 
     return fig
 
