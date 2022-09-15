@@ -1,3 +1,4 @@
+from re import search
 from dash import Dash, html, dcc, Input, Output
 #from dash_core_components import Dropdown
 import plotly.express as px
@@ -5,8 +6,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots 
-import tkinter as tk
-from tkinter import ttk
 
 app = Dash(__name__)
 
@@ -47,15 +46,16 @@ barras = px.bar(df, x = None, y = 'DEP_PN_ED', color = 'NOME')
 # LAYOUT
 #============================================
 app.layout = html.Div(children = [
-    html.H1(children = 'Dashboard - Catalogo visual'),
+    html.H1(children = 'Dashboard - Catalogo visual'), #cabeçalho
     html.H2(children = 'Raça: Nelore'),
+    html.H3(children = 'Dados', id = 'maximo_drop'),
     html.Div(children = [
-            html.Label("Escolha as características: "),
+            html.Label('Escolha as características: '),
             dcc.Dropdown(
                     id='dropdown_caracteristicas',
                     options = [{'label': x, 'value': x} for x in conteudo_dropdown],
-                    value = None,
-                    multi=True
+                    placeholder = 'Selecione a(s) característica(s): ',
+                    multi= True
                        ),
             html.Button('Característica 1', id='caracteristica_1', n_clicks=0), #n_clicks: parâmetro para o input do callback
             html.Button('Característica 2', id='caracteristica_2', n_clicks=0), #n_clicks: número de vezes que o botão foi clicado
@@ -63,10 +63,18 @@ app.layout = html.Div(children = [
             html.Button('Característica 4', id='caracteristica_4', n_clicks=0),
             html.Button('Característica 5', id='caracteristica_5', n_clicks=0),
             html.Button('Característica 6', id='caracteristica_6', n_clicks=0),
-            html.Div(id = 'botao_enter'),
-            html.Label('Quantidade de animais: '),
-            dcc.Input(id = 'numero_animais', min = 0, max = 10, value = 0, type = 'number')]
+            #html.Div(id = 'botao_enter'),
+            #html.Label('Quantidade de animais: '),
+            #dcc.Input(id = 'numero_animais', min = 0, max = 10, value = 0, type = 'number', placeholder = 'nº de animais'),
+
+            #html.Label('Número máximo: '),
+            #dcc.Input(id = 'num_max', min = 0, max = 10, value = 0, type = 'number', placeholder = 'Máximo'),
+            
+            #html.Label('Número mínimo: '),
+            #dcc.Input(id = 'num_min', min = 0, max = 10, value = 0, type = 'number', placeholder = 'Mínimo')
+            ]
             ),
+
 
     dcc.Graph(
         id = 'coordenadas_paralelas',
@@ -78,11 +86,15 @@ app.layout = html.Div(children = [
         figure = barras
     )
 ])
+    
+#============================================
+# MÁXIMO DE CARACTERÍSTICAs DO DROPDOWN
+#============================================
+
 
 #============================================
 # VALOR CRESCENTE OU DECRESCENTE
 #============================================
-
 def maior_menor(a):
     if df.columns == a:
         dff = sorted(df.columns)
@@ -114,6 +126,7 @@ def update_coordenadas_paralelas(dropdown_caracteristicas):
     Input('dropdown_caracteristicas', 'value')
 
 )
+
 #df['NOME'] = numero_animais
 #print(df['NOME'])
 
@@ -133,6 +146,108 @@ def update_graficos_barras(dropdown_caracteristicas):
 
     return fig
 
+#@app.callback(
+ #   Output('dropdown_caracteristicas', 'options'), #vai receber uma mensagem 
+  #  Output('dropdown_caracteristicas', 'placeholder'), #vai apresentar as 6 caracteristicas
+   # Input('dropdown_caracteristicas', 'value')
+#)
+
+#def update_label_valor_maximo(dropdown_caracteristicas):
+    #print(type(dropdown_caracteristicas))
+    #opcoes = [{'label': x, 'value': x} for x in conteudo_dropdown]
+    #place = ['1', '2', '3', '4', '5', '6']
+    #if type(dropdown_caracteristicas) != 'object':
+        #if len(dropdown_caracteristicas) > 6:
+            #opcoes = 'Você não pode selecionar mais características'
+        #else:
+            #place[0] = 'ola'
+
+
+    #return opcoes, place 
+
+@app.callback(
+    Output('caracteristica_1', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None:
+        value = 'Característica 1'
+    else:
+        value = dropdown_caracteristicas[0]
+
+    return value
+
+@app.callback(
+    Output('caracteristica_2', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None:
+        value = 'Caracteristica 2'
+    else:
+        if len(dropdown_caracteristicas) == 1:
+            value = 'Característica 2'
+        else:
+            value = dropdown_caracteristicas[1]
+
+    return value
+
+@app.callback(
+    Output('caracteristica_3', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None or len(dropdown_caracteristicas) == 1:
+        value = 'Caracteristica 3'
+    else:
+        if len(dropdown_caracteristicas) == 2:
+            value = 'Característica 3'
+        else:
+            value = dropdown_caracteristicas[2]
+
+    return value
+
+@app.callback(
+    Output('caracteristica_4', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None or len(dropdown_caracteristicas) == 1 or len(dropdown_caracteristicas) == 2 or len(dropdown_caracteristicas) == 3:
+        value = 'Caracteristica 4'
+    else:
+        value = dropdown_caracteristicas[3]
+
+    return value
+
+@app.callback(
+    Output('caracteristica_5', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None or len(dropdown_caracteristicas) == 1 or len(dropdown_caracteristicas) == 2 or len(dropdown_caracteristicas) == 3 or len(dropdown_caracteristicas) == 4:
+        value = 'Caracteristica 5'
+    else:
+        value = dropdown_caracteristicas[4]
+
+    return value
+
+@app.callback(
+    Output('caracteristica_6', 'children'),
+    Input('dropdown_caracteristicas', 'value')
+)
+
+def update_botao(dropdown_caracteristicas):
+    if dropdown_caracteristicas == None or len(dropdown_caracteristicas) == 1 or len(dropdown_caracteristicas) == 2 or len(dropdown_caracteristicas) == 3 or len(dropdown_caracteristicas) == 4 or len(dropdown_caracteristicas) == 5:
+        value = 'Caracteristica 6'
+    else:
+        value = dropdown_caracteristicas[5]
+
+    return value
 
 if __name__ == '__main__':
     app.run_server(debug=True, use_reloader=False)
